@@ -1,0 +1,7 @@
+let input = cat(argv[1])
+input
+    | withIndex
+    | iter::find => x: (input[x[1]..x[1] + 4] | set | len) == 4
+    | row 1
+    | math::add 4
+    | println

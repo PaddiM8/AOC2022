@@ -1,0 +1,8 @@
+let packetSize = 14
+let input = cat(argv[1])
+input
+    | withIndex
+    | select => x: x[1]
+    | iter::find => x: (input[x..x + packetSize] | set | len) == packetSize
+    | math::add(packetSize)
+    | println

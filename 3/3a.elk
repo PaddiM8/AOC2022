@@ -1,0 +1,22 @@
+fn getItemPriority(letter) {
+    if letter < "a" {
+        str::ord(letter) - str::ord("A") + 27
+    } else {
+        str::ord(letter) - str::ord("a") + 1
+    }
+}
+
+fn getMisplacedPriority(rucksack) {
+    let middle = len(rucksack) / 2
+    let secondHalf = rucksack[middle..] | set
+    rucksack[..middle]
+        | where => x: x in secondHalf
+        | first
+        | getItemPriority
+}
+
+cat(argv[1])
+    | lines
+    | getMisplacedPriority!
+    | math::sum
+    | println

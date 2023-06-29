@@ -1,0 +1,30 @@
+fn countVisible(lines) {
+    # Trees by edges are visible, start with those
+    let count = (len(lines) - 2) * 2 + len(lines | first) * 2
+
+    # Ignore the trees by the edges since those are always visible
+    for y in 1..(len(lines) - 1) {
+        for x in 1..(len(lines[y]) - 1) {
+            count += 1 if lines | isVisible(x, y)
+        }
+    }
+
+    count
+}
+
+fn isVisible(lines, x, y) {
+    let value = lines[y][x]
+    let condition = &Fn => a: a < value
+
+    (lines | row(y)          | iter::take(x)     | select => &condition | iter::allAndAny) or
+    (lines | row(y)          | iter::skip(x + 1) | select => &condition | iter::allAndAny) or
+    (lines | list::column(x) | iter::take(y)     | select => &condition | iter::allAndAny) or
+    (lines | list::column(x) | iter::skip(y + 1) | select => &condition | iter::allAndAny)
+}
+
+cat(argv[1])
+    | lines
+    | countVisible
+    | println
+
+

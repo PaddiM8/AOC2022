@@ -1,0 +1,1 @@
+cat 1.txt | split "\n\n" | lines! | math::sum! | sort::desc | iter::take 3 | math::sum

@@ -1,0 +1,36 @@
+using iter
+
+fn toScenicScores(lines) {
+    let scores = []
+    for y in 1..(len(lines) - 1) {
+        for x in 1..(len(lines | first) - 1) {
+            scores | push(lines | getScenicScore(x, y))
+        }
+    }
+
+    scores
+}
+
+fn getScenicScore(lines, x, y) {
+    [
+        lines | row(y) | take(x) | reverse,
+        lines | row(y) | skip(x + 1),
+        lines | list::column(x) | take(y) | reverse,
+        lines | list::column(x) | skip(y + 1),
+    ]
+    | select => side {
+        let c = for (tree, i) in side | withIndex:
+            break i + 1 if tree >= lines[y][x]
+
+        c ?? len(side)
+    }
+    | iter::reduce => a, b: a * b
+}
+
+cat(argv[1])
+    | lines
+    | toScenicScores
+    | max
+    | println
+
+

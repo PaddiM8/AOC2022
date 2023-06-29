@@ -1,0 +1,1 @@
+cat 1.txt | split "\n\n" | lines! | math::sum! | max

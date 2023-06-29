@@ -1,0 +1,35 @@
+fn parse(lines) {
+    let stacks = []
+    let end = for (line, lineIndex) in lines | withIndex {
+        break lineIndex if (line | str::startsWith(" 1"))
+
+        let crates = line
+            | iter::chunks 4
+            | select => x: x[1]
+        for (crate, stackIndex) in crates | withIndex {
+            stacks | push([]) if len(stacks) <= stackIndex
+            stacks[stackIndex] | insert(0, crate) if crate != " "
+        }
+    }
+
+    parseInstructions(lines, end + 2, stacks)
+}
+
+fn parseInstructions(lines, startIndex, stacks) {
+    for line in lines[startIndex..] {
+        let (count, fromStack, toStack) = '\d+' | regex::findAll(line) | int!
+        stacks | moveCrates(count, fromStack, toStack)
+    }
+
+    stacks
+        | where => x: len(x) > 0
+        | last!
+        | join
+}
+
+fn moveCrates(stacks, count, fromStack, toStack) {
+    for _ in 0..count:
+        stacks[toStack - 1] | push(stacks[fromStack - 1] | pop)
+}
+
+cat(argv[1]) | lines | parse | println

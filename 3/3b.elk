@@ -1,0 +1,23 @@
+fn getItemPriority(letter) {
+    if letter < "a" {
+        str::ord(letter) - str::ord("A") + 27
+    } else {
+        str::ord(letter) - str::ord("a") + 1
+    }
+}
+
+fn getBadgePriority(group) {
+    let rucksacks = group | set!
+    rucksacks[0]
+        | set::intersect(rucksacks[1])
+        | set::intersect(rucksacks[2])
+        | first
+        | getItemPriority
+}
+
+cat(argv[1])
+    | lines
+    | iter::chunks 3
+    | getBadgePriority!
+    | math::sum
+    | println

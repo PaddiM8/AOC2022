@@ -1,0 +1,8 @@
+fn overlap(a, b): first(a) in b or first(b) in a
+
+cat(argv[1])
+    | lines
+    | select => x: (x | split "," | split! "-")
+    | select! => range: range[0]..=range[1]
+    | iter::count => pair: overlap(pair[0], pair[1])
+    | println

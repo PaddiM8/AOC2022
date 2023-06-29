@@ -1,0 +1,6 @@
+cat(argv[1])
+    | lines
+    | select => x: regex::findAll('\d+', x)
+    | select! => &int
+    | iter::count => x: x[1] >= x[2] and x[0] <= x[3]
+    | println
